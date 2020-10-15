@@ -25,4 +25,4 @@ In the future, I hope to:
 * Add a "Show hint" feature so that users can get a clues on boards they are stuck on rather than getting full solutions 
 * Deploy as a simple web or mobile app
 
-#### Thanks for checking my project! :wave:
+#### Thanks for checking out my project! :wave:
