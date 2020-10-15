@@ -7,7 +7,6 @@ MARGIN = 15
 SIDE = 60 
 WIDTH = HEIGHT = MARGIN * 2 + SIDE * 9 
 
-
 class SudokuGUI(Frame):
     '''
     Tkinter UI which displays the board and allows the user to input values directly into the board
@@ -27,7 +26,6 @@ class SudokuGUI(Frame):
         '''
         Set up widgets
         '''
-
 
         myFont = font.Font(family='Arial', size=16)
 
@@ -50,8 +48,9 @@ class SudokuGUI(Frame):
 
     def __draw_board(self):
         '''
-        Draw sudoku board
+        Draw blank sudoku board
         '''
+
         for i in range(10):
             color = 'black' if i % 3 == 0 else 'gray'
 
@@ -68,9 +67,11 @@ class SudokuGUI(Frame):
             self.canvas.create_line(x0, y0, x1, y1, fill=color)
 
     def __draw_puzzle(self):
-        '''Fill in the existing puzzle details'''
+        '''
+        Fill in numbers on the board
+        '''
 
-        self.canvas.delete('result')  # remove time stamp from view
+        self.canvas.delete('result')
         self.canvas.delete('numbers')
         for i in range(9):
             for j in range(9):
@@ -82,7 +83,10 @@ class SudokuGUI(Frame):
                     self.canvas.create_text(x, y, text=answer, tags='numbers', fill='black', font=('Arial', 20))
 
     def __draw_cursor(self):
-        '''Draw a red border around a selected cell'''
+        '''
+        Creates a border around the currently selected cell
+        '''
+
         self.canvas.delete('cursor')
         if self.row >= 0 and self.col >= 0:
             x0 = MARGIN + self.col * SIDE + 1
@@ -92,17 +96,20 @@ class SudokuGUI(Frame):
             self.canvas.create_rectangle( x0, y0, x1, y1, outline='green2', tags='cursor')
 
     def __draw_result(self, success, time):
-        # create a oval (which will be a circle)
+        '''
+        Create rectangle output that shows if the solve completed or failed
+        '''
+
+        # Rectangle output dimenstions
         x0 = MARGIN + SIDE * 2.5
         y0 = MARGIN + SIDE * 3.5
         x1 = MARGIN + SIDE * 6.5
         y1 = MARGIN + SIDE * 5.5
         
-        
-        # create text
+        # Output either success message or invalid board
         x = y = MARGIN + 4 * SIDE + SIDE / 2
         if success:
-            self.canvas.create_rectangle( x0, y0, x1, y1, tags='result', fill='green', outline='black')
+            self.canvas.create_rectangle(x0, y0, x1, y1, tags='result', fill='green', outline='black')
             
             self.canvas.create_text(
                 x, y,
@@ -114,31 +121,54 @@ class SudokuGUI(Frame):
             
             self.canvas.create_text(
                 x, y,
-                text='Invalid board, please try again!', tags='result',
+                text='Invalid board!', tags='result',
                 fill='white', font=('Arial', 20)
             )
 
     def __cell_clicked(self, event):
-        self.canvas.delete('result')  # remove time stamp from view
+        '''
+        Selects a cell that has been clicked
+        '''
+
+        self.canvas.delete('result') 
         x, y = event.x, event.y
+
+        # Get coordinates of the clicked cell and place curosr there
         if MARGIN < x < WIDTH - MARGIN and MARGIN < y < HEIGHT - MARGIN:
             self.canvas.focus_set()
-
-            # get row and col numbers from x,y coordinates
             row, col = (y - MARGIN) // SIDE, (x - MARGIN) // SIDE
 
-            # if cell was selected already - deselect it
             if (row, col) == (self.row, self.col):
                 self.row, self.col = -1, -1
             else:
                 self.row, self.col = row, col
+        
         else:
             self.row, self.col = -1, -1
 
         self.__draw_cursor()
 
+    def __go_next(self):
+        '''
+        Advance to the next cell on the board
+        '''
+
+        row = self.row
+        col = self.col
+        if col < 8:
+            self.col += 1
+        elif row < 8:
+            self.row += 1
+            self.col = 0
+        else:
+            self.row = 0
+            self.col = 0
+
     def __key_pressed(self, event):
-        '''Catch all key press events and handle them'''
+        '''
+        Tracks and records key presses to navigate the board and enter numbers
+        '''
+
         if self.row >= 0 and self.col >= 0:
             if event.keysym in ['Up', 'w']:
                 self.row = ((self.row + 8) % 9)
@@ -157,24 +187,19 @@ class SudokuGUI(Frame):
             self.__draw_puzzle()
             self.__draw_cursor()
 
-    def __go_next(self):
-        '''Advance to the next cell'''
-        row = self.row
-        col = self.col
-        if col < 8:
-            self.col += 1
-        elif row < 8:
-            self.row += 1
-            self.col = 0
-        else:
-            self.row = 0
-            self.col = 0
-
     def __clear(self):
+        '''
+        Clears the board
+        '''
+
         self.sudoku.clear()
         self.__draw_puzzle()
 
     def __solve(self):
+        '''
+        Solves the board and outputs message
+        '''
+
         success, time = self.sudoku.solve()
         self.__draw_puzzle()
         self.__draw_result(success, time)
