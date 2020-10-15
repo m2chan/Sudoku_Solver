@@ -17,7 +17,7 @@ Once the user has entered all the inputs and is ready to solve the board, click 
 
 The user can click anywhere on the board to clear the pop-up messages, and the user can also click "Clear board" to clear the current board and enter a new board.
 
-### Technical details
+## Technical details
 
 This project was built entirely in Python and the `Tkinter` library for the user interface.
 
