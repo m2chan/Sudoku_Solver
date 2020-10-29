@@ -11,7 +11,7 @@ This is the blank board that is loaded at the start of the program. The user can
 
 <img src="images/blank_board.png" alt="alt text" align="center" width="=400" height="400">--><img src="images/inputted_square.png" alt="alt text" align="center" width="=400" height="400">
 
-Once the user has entered all the inputs and is ready to solve the board, click the "Solve" button at the bottom of the board. If the board is a valid Sudoku board, then a "Solved" message will appear on screen, otherwise, an error message will appear.
+Once the user has entered all the inputs and is ready to solve the board, click the "Solve" button at the bottom of the board. A brute-force backtracking algorithm then attempts to solve the board. If the board is a valid Sudoku board, then a "Solved" message will appear on screen along with the time it took to solve, otherwise, an error message will appear.
 
 <img src="images/solved_board.png" alt="alt text" align="center" width="=400" height="400">---<img src="images/invalid_board.png" alt="alt text" align="center" width="=400" height="400">
 
